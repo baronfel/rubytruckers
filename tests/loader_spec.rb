@@ -14,15 +14,6 @@ describe Loader do
     end
   end
 
-=begin
-  describe '#load_tiles' do
-    it 'loads tiles' do
-      tiles = @loader.load_tiles
-      tiles.length.should equal 100
-    end
-  end
-=end
-
   describe '#save_tiles' do
     it 'saves a list of tiles' do
       tiles = make_tiles 10
