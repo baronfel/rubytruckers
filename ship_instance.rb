@@ -110,4 +110,20 @@ class ShipInstance
     # TODO: make the player choose a tile
     tile1
   end
+
+  # TODO : flesh this out
+  def engine_power
+    1
+  end
+
+  #TODO: flesh this out
+  def weapons_power
+    1
+  end
+
+  # TODO: flesh this out
+  def crew_count
+    1
+  end
+
 end
