@@ -1,25 +1,28 @@
-module Loader
-  require "yaml"
+class Loader
+  require 'yaml'
 
-  @@base_dir = ".\\assets"
+  def initialize(tile_file)
+    @tile_file = tile_file
+  end
 
   def load_ship_design(round_num)
-    return YAML::load("#{@@base_dir}\\round#{round_num}.shp")
+    return YAML.load_file(".//assets//round#{round_num}.shp")
   end
 
   def save_ship_design(round_num, design)
     objRep = YAML::dump(design)
-    file = File.open("#{@@base_dir}\\round#{round_num}.shp", 'w')
+    file = File.open(".\\assets\\round#{round_num}.shp", 'w')
     file.puts objRep
   end
 
   def load_tiles
-    return YAML::load("#{@@base_dir}\\tileList.tls")
+    return YAML.load_file @tile_file
   end
 
   def save_tiles(tiles)
     objRep = YAML::dump(tiles)
-    file = File.open("#{@@base_dir}\\tileList.tls", 'w')
-    file.puts objRep
+    File.open(@tile_file, 'w') {
+      |x| x.puts objRep
+    }
   end
 end
