@@ -4,20 +4,22 @@ module Loader
   @@base_dir = ".\\assets"
 
   def load_ship_design(round_num)
-    readfile = File.open("#{@@base_dir}\\round#{round_num}.shp")
-
+    return YAML::load("#{@@base_dir}\\round#{round_num}.shp")
   end
 
-  def save_ship_design(round_num)
-
+  def save_ship_design(round_num, design)
+    objRep = YAML::dump(design)
+    file = File.open("#{@@base_dir}\\round#{round_num}.shp", 'w')
+    file.puts objRep
   end
 
   def load_tiles
-
+    return YAML::load("#{@@base_dir}\\tileList.tls")
   end
 
-  def save_tiles
-
+  def save_tiles(tiles)
+    objRep = YAML::dump(tiles)
+    file = File.open("#{@@base_dir}\\tileList.tls", 'w')
+    file.puts objRep
   end
-
 end

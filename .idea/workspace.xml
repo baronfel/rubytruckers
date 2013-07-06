@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="09525400-0561-4a11-a3e9-959af488c1ae" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/loader.rb" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/assets/round1.shp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/trucker_main.rb" afterPath="$PROJECT_DIR$/trucker_main.rb" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/assets/tileList.tls" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/loader.rb" afterPath="$PROJECT_DIR$/loader.rb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="rubytruckers.iws" />
@@ -15,7 +13,7 @@
     <file path="/ship_tile.rb" changelist="09525400-0561-4a11-a3e9-959af488c1ae" time="1373135516573" ignored="false" />
     <file path="/tile_side.rb" changelist="09525400-0561-4a11-a3e9-959af488c1ae" time="1373135193561" ignored="false" />
     <file path="/temp.rb" changelist="09525400-0561-4a11-a3e9-959af488c1ae" time="1373135099317" ignored="false" />
-    <file path="/loader.rb" changelist="09525400-0561-4a11-a3e9-959af488c1ae" time="1373137766479" ignored="false" />
+    <file path="/loader.rb" changelist="09525400-0561-4a11-a3e9-959af488c1ae" time="1373139287586" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +54,7 @@
       <file leaf-file-name="loader.rb" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/loader.rb">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="22" column="3" selection-start="262" selection-end="262" vertical-scroll-proportion="0.6042003">
+            <state line="23" column="5" selection-start="546" selection-end="546" vertical-scroll-proportion="0.631664">
               <folding />
             </state>
           </provider>
@@ -435,9 +433,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/rubystubs193/kernel.rb">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="545" column="8" selection-start="20964" selection-end="20964" vertical-scroll-proportion="0.33279485">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/assets/tileList.tls">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/loader.rb">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="3" selection-start="262" selection-end="262" vertical-scroll-proportion="0.6042003">
+        <state line="23" column="5" selection-start="546" selection-end="546" vertical-scroll-proportion="0.631664">
           <folding />
         </state>
       </provider>
