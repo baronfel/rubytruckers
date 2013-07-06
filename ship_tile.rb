@@ -1,3 +1,4 @@
+require File.expand_path(File.dirname(__FILE__) + '/coordinate.rb')
 class ShipTile
   attr_accessor(:coord)
 
@@ -70,15 +71,5 @@ class ShipTile
     my_side = @sides[my_orientation]
     adjacent_side = adjacent_tile.get_side(adjacent_orientation)
     [my_side, adjacent_side]
-  end
-end
-
-class Coordinate
-  attr_reader(:x_loc)
-  attr_reader(:y_loc)
-  
-  def initialize(x, y)
-    @x_loc = x
-    @y_loc = y
   end
 end
