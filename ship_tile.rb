@@ -1,14 +1,14 @@
 class ShipTile
-  attr_reader(:coordinate)
+  attr_accessor(:coord)
 
-  def initialize(coordinate, north, east, south, west, *contents)
-    @coordinate = coordinate
-    @sides = {:north => north, :east => east, :south => south, :west => west}
+  def initialize(coord, north, east, south, west, *contents)
+    @coord = coord
+    @sides = {north: north, east: east, south: south, west: west}
     @contents = contents
   end
 
   def rotate_clockwise
-    ShipTile.new(@coordinate, @sides[:west], @sides[:north], @sides[:east], @sides[:south], @contents.map {|c| c.rotate_clockwise})
+    ShipTile.new(@coord, @sides[:west], @sides[:north], @sides[:east], @sides[:south], @contents.map {|c| c.rotate_clockwise})
   end
 
   def rotate_clockwise!
@@ -21,7 +21,7 @@ class ShipTile
   end
 
   def rotate_counter
-    ShipTile.new(@coordinate, @sides[:east], @sides[:south], @sides[:west], @sides[:north], @contents.map {|c| c.rotate_counter})
+    ShipTile.new(@coord, @sides[:east], @sides[:south], @sides[:west], @sides[:north], @contents.map {|c| c.rotate_counter})
   end
 
   def rotate_counter!
@@ -43,6 +43,7 @@ class ShipTile
   end
 
   def follows_rules?(adjacent_tile)
+    return true if adjacent_tile == :empty
     my_side, adjacent_side = get_sides(adjacent_tile)
     my_side.follows_rules?(adjacent_side)
   end
@@ -53,13 +54,13 @@ class ShipTile
   end
 
   def get_sides(adjacent_tile)
-    if @coordinate.x_loc > adjacent_tile.coordinate.x_loc
+    if @coord.x_loc > adjacent_tile.coord.x_loc
       my_orientation = :west
       adjacent_orientation = :east
-    elsif @coordinate.x_loc < adjacent_tile.coordinate.x_loc
+    elsif @coord.x_loc < adjacent_tile.coord.x_loc
       my_orientation = :east
       adjacent_orientation = :west
-    elsif @coordinate.y_loc > adjacent_tile.coordinate.y_loc
+    elsif @coord.y_loc > adjacent_tile.coord.y_loc
       my_orientation = :north
       adjacent_orientation = :south
     else
