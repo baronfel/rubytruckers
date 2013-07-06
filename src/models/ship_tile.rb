@@ -45,16 +45,16 @@ class ShipTile
 
   def follows_rules?(adjacent_tile)
     return true if adjacent_tile == :empty
-    my_side, adjacent_side = get_sides(adjacent_tile)
+    my_side, adjacent_side = get_matching_sides(adjacent_tile)
     my_side.follows_rules?(adjacent_side)
   end
 
   def is_connected?(adjacent_tile)
-    my_side, adjacent_side = get_sides(adjacent_tile)
+    my_side, adjacent_side = get_matching_sides(adjacent_tile)
     my_side.is_connected?(adjacent_side)
   end
 
-  def get_sides(adjacent_tile)
+  def get_matching_sides(adjacent_tile)
     if @coord.x_loc > adjacent_tile.coord.x_loc
       my_orientation = :west
       adjacent_orientation = :east
