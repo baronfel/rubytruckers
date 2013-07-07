@@ -222,7 +222,7 @@ class ShipInstance
     weapons = tiles.map { |tile| tile.sides }.select { |orientation, side| side.respond_to?(:gun_strength) }
     strengths = weapons.map { |orientation, weapon| weapon_side_strength(orientation, weapon) }
     strengths.inject(0, &:+)
-  end
+end
 
   def engine_power!
     current_strength = min_engine_power
