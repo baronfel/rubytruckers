@@ -1,5 +1,5 @@
-requires ShipTile
-requires UniversalConnector
+require_relative 'ship_tile'
+require_relative 'tile_side'
 
 class ShipInstance
   def initialize(definition)
@@ -189,6 +189,10 @@ class ShipInstance
   # TODO: flesh this out
   def crew_count!
     1
+  end
+
+  def crew_count=(num)
+    @crew_count = num
   end
 
 end

@@ -6,7 +6,7 @@ require 'rspec'
 describe Loader do
 
   before :each do
-    @loader = Loader.new('./test_tile_file.tls', '.')
+    @loader = Loader.new('./test_tile_file.tls', '.', './test_cards_file.cds')
   end
 
   describe '#new' do

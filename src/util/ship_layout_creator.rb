@@ -12,7 +12,7 @@ class ShipLayoutCreator
     design.shape << [Coordinate.new(5,8),Coordinate.new(6,8),Coordinate.new(7,8),Coordinate.new(8,8),Coordinate.new(9,8)]
     design.shape << [Coordinate.new(5,9),Coordinate.new(6,9),Coordinate.new(8,9),Coordinate.new(9,9)]
 
-    loader = Loader.new(nil, '../../assets/')
+    loader = Loader.new(nil, '../../assets/', nil)
     loader.save_ship_design(1, design)
   end
 
@@ -25,7 +25,7 @@ class ShipLayoutCreator
     (4..10).each { |x| design.shape.push Coordinate.new(x,8)}
     (3..6).each { |x| design.shape.push Coordinate.new(x,9)}; (8..10).each {|x| design.shape.push Coordinate.new(x,9)};
 
-    loader = Loader.new(nil, '../../assets/')
+    loader = Loader.new(nil, '../../assets/', nil)
     loader.save_ship_design(2, design)
   end
 
@@ -37,7 +37,7 @@ class ShipLayoutCreator
     (3..11).each {|x| design.shape << [Coordinate.new(x,7),Coordinate.new(x,8)]}
     design.shape << [Coordinate.new(3,9),Coordinate.new(4,9),Coordinate.new(6,9),Coordinate.new(7,9),Coordinate.new(8,9),Coordinate.new(10,9),Coordinate.new(11,9)]
 
-    loader = Loader.new(nil, '../../assets/')
+    loader = Loader.new(nil, '../../assets/', nil)
     loader.save_ship_design(3, design)
   end
 end
