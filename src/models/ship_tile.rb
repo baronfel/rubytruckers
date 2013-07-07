@@ -1,7 +1,8 @@
 require_relative '../../src/models/coordinate'
 
 class ShipTile
-  attr_accessor(:coord)
+  attr_accessor :coord
+  attr_reader :contents
 
   def initialize(coord, north, east, south, west, *contents)
     @coord = coord
