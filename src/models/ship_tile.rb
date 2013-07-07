@@ -10,7 +10,7 @@ class ShipTile
   end
 
   def rotate_clockwise
-    ShipTile.new(@coord, @sides[:west], @sides[:north], @sides[:east], @sides[:south], @contents.map {|c| c.rotate_clockwise})
+    ShipTile.new(@coord, @sides[:west], @sides[:north], @sides[:east], @sides[:south], @contents.map {|c| c.respond_to?(:rotate_clockwise) ? c.rotate_clockwise : c})
   end
 
   def rotate_clockwise!
@@ -19,11 +19,11 @@ class ShipTile
     @sides[:west] = @sides[:south]
     @sides[:south] = @sides[:east]
     @sides[:east] = temp_north
-    @contents.each {|c| c.rotate_clockwise!}
+    @contents.each {|c| c.rotate_clockwise! if c.respond_to?(:rotate_clockwise!)}
   end
 
   def rotate_counter
-    ShipTile.new(@coord, @sides[:east], @sides[:south], @sides[:west], @sides[:north], @contents.map {|c| c.rotate_counter})
+    ShipTile.new(@coord, @sides[:east], @sides[:south], @sides[:west], @sides[:north], @contents.map {|c| c.respond_to?(:rotate_counter) ? c.rotate_counter : c})
   end
 
   def rotate_counter!
@@ -32,7 +32,7 @@ class ShipTile
     @sides[:east] = @sides[:south]
     @sides[:south] = @sides[:west]
     @sides[:west] = temp_north
-    @contents.each {|c| c.rotate_counter!}
+    @contents.each {|c| c.rotate_counter! if c.respond_to?(:rotate_counter!)}
   end
 
   def get_side(orientation)
