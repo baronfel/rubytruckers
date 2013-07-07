@@ -32,12 +32,12 @@ class AbandonedShipCard < Card
   end
 
   def can_execute(ship)
-    ship.crew_count > @crew_cost
+    ship.crew_count! > @crew_cost
   end
 
 
   def execute(ship)
-    ship.crew_count -= @crewCost
+    ship.crew_count! -= @crewCost
     # TODO: need to add coins to the controlling player
     # TODO: need to penalize ship the number of days
   end
