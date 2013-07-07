@@ -1,4 +1,5 @@
-require File.expand_path(File.dirname(__FILE__) + '/coordinate.rb')
+require_relative '../../src/models/coordinate'
+
 class ShipTile
   attr_accessor(:coord)
 
