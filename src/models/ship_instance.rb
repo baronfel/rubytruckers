@@ -16,7 +16,7 @@ class ShipInstance
                                                       UniversalConnector.new,
                                                       UniversalConnector.new,
                                                       UniversalConnector.new,
-                                                      TileContent.new)
+                                                      Habitat.new(2))
     @removed_tiles = []
   end
 
