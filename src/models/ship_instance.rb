@@ -20,9 +20,22 @@ class ShipInstance
     @removed_tiles = []
   end
 
+  def tiles
+    #TODO: map has into a list for traversal.
+  end
+
   def put_tile!(tile, coord)
     @shape[coord.x_loc][coord.y_loc] = tile
     tile.coord = coord
+  end
+
+  def has_tile?(coord)
+    col = @shape[coord.x_loc]
+    if col.nil? then
+      false
+    else
+      col[coord.y_loc] == :empty ? false : true
+    end
   end
 
   def remove_tile!(coord)
@@ -152,6 +165,11 @@ class ShipInstance
       else
         nil
     end
+  end
+
+  def exposed_connectors
+    # TODO: blurgh
+    []
   end
 
   def get_shield!(orientation)
