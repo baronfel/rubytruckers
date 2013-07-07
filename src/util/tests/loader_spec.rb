@@ -1,6 +1,6 @@
-require_relative '../src/util/loader'
-require_relative '../src/models/ship_tile'
-require_relative '../src/models/ship_definition'
+require_relative '../loader'
+require_relative '../../../src/models/ship_tile'
+require_relative '../../../src/models/ship_definition'
 require 'rspec'
 
 describe Loader do

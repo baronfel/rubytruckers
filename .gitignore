@@ -2,8 +2,8 @@
 ## Idea
 #################
 .idea/
-tests/*.tls
-tests/*.shp
+util/tests/*.tls
+util/tests/*.shp
 
 #################
 ## Eclipse
