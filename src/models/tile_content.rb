@@ -4,6 +4,10 @@ class Habitat
   def initialize(beings)
     @beings = beings
   end
+
+  def is_occupied?
+    @beings.length > 0
+  end
 end
 
 class AlienHabitat
