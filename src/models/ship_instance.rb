@@ -1,5 +1,6 @@
 requires ShipTile
 requires UniversalConnector
+requires Shield
 
 class ShipInstance
   def initialize(definition)
@@ -21,7 +22,7 @@ class ShipInstance
   end
 
   def tiles
-    #TODO: map has into a list for traversal.
+    @shape.values.map { |v| v.values }.flatten
   end
 
   def put_tile!(tile, coord)
@@ -83,7 +84,7 @@ class ShipInstance
     i = 0
     while i < connected_tiles.length
       tile = connected_tiles[i]
-      if tile != :empty
+      if tile != nil && tile != :empty
         adj_tiles = get_adjacent_tiles(tile)
         adj_tiles.each { |adj| connected_tiles << adj unless connected_tiles.include?(adj) }
       end
@@ -116,7 +117,7 @@ class ShipInstance
     if @shape[x] != nil
       return @shape[x][y]
     end
-    :empty
+    nil
   end
 
   def player_choose_tile(tile1, tile2)
@@ -168,12 +169,61 @@ class ShipInstance
   end
 
   def exposed_connectors
-    # TODO: blurgh
-    []
+    connectors = []
+    @shape.each_value { |col|
+      col.each_value { |tile|
+        x = tile.coord.x_loc
+        y = tile.coord.y_loc
+        north_tile = get_tile(x, y - 1)
+        connectors << north_tile if is_exposed?(tile, north_tile, :north)
+        south_tile = get_tile(x, y + 1)
+        connectors << south_tile if is_exposed?(tile, south_tile, :south)
+        east_tile = get_tile(x + 1, y)
+        connectors << east_tile if is_exposed?(tile, east_tile, :east)
+        west_tile = get_tile(x - 1, y)
+        connectors << west_tile if is_exposed?(tile, west_tile, :west)
+      }
+    }
+    connectors
   end
 
-  def get_shield!(orientation)
-    # TODO : prompt player for choice
+  def is_exposed?(tile1, tile2, direction)
+    return false unless tile2 == nil || tile2 == :empty
+    tile1.get_side(direction).num_connectors != 0
+  end
+
+  def has_shield?(orientation)
+    tiles.map { |tile| tile.contents }.flatten.find_index { |content| content.is_a?(Shield) && content.orientation == orientation } != nil
+  end
+
+  def find_tile_contents(type)
+    tiles.map { |tile| tile.contents }.flatten.find_all { |content| content.is_a?(type) }
+  end
+
+  def min_engine_power
+    tiles.map { |tile| tile.sides }.values.inject(0) { |sum, side|
+      sum += side.engine_strength if side.respond_to?(:engine_strength) && (!side.respond_to?(:require_batteries) || side.require_batteries == 0)
+      sum
+    }
+  end
+
+  def potential_engine_power
+    tiles.map { |tile| tile.sides }.values.inject(0) { |sum, side|
+      sum += side.engine_strength if side.respond_to?(:engine_strength)
+      sum
+    }
+  end
+
+  def min_weapons_power
+    weapons = tiles.map { |tile| tile.sides }.select { |key, side| side.respond_to?(:gun_strength) && (!side.respond_to?(:require_batteries) || side.require_batteries == 0) }
+    strengths = weapons.map { |orientation, weapon| orientation == :north ? weapon.gun_strength : weapon.gun_strength / 2.0 }
+    strengths.inject(0, &:+)
+  end
+
+  def potential_weapons_power
+    weapons = tiles.map { |tile| tile.sides }.select { |key, side| side.respond_to?(:gun_strength) }
+    strengths = weapons.map { |orientation, weapon| orientation == :north ? weapon.gun_strength : weapon.gun_strength / 2.0 }
+    strengths.inject(0, &:+)
   end
 
   # TODO : flesh this out
@@ -187,7 +237,7 @@ class ShipInstance
   end
 
   # TODO: flesh this out
-  def crew_count!
+  def crew_count
     1
   end
 

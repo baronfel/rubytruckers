@@ -37,12 +37,12 @@ class AbandonedShipCard < Card
   end
 
   def can_execute?(ship)
-    ship.crew_count! > @crew_cost
+    ship.crew_count > @crew_cost
   end
 
 
   def execute(ship)
-    ship.crew_count! -= @crew_cost
+    ship.crew_count -= @crew_cost
     # TODO: need to add coins to the controlling player
     # TODO: need to penalize ship the number of days
   end
@@ -60,7 +60,7 @@ class AbandonedStationCard < Card
   end
 
   def can_execute?(ship)
-    ship.crew_count! >= @crew_prereq
+    ship.crew_count >= @crew_prereq
   end
 
   def execute(ship)
@@ -213,7 +213,7 @@ class SlaversCard < Card
     elsif ship.weapons_power! == @weapons_prereq
       return
     else
-      ship.crew_count! -= @crew_cost
+      ship.crew_count -= @crew_cost
     end
   end
 end
@@ -236,14 +236,14 @@ class CombatZoneCard < Card
     @steps.each {|comparer, effect|
       ship = nil
       case comparer
-        when :crew then ship = @ships.sort{|x| x.crew_count!}[0]
+        when :crew then ship = @ships.sort{|x| x.crew_count}[0]
         when :weapons then ship = @ships.sort{|x| x.weapons_power!}[0]
         when :engines then ship = @ships.sort{|x| x.engine_power!}[0]
       end
 
       case effect[0]
         when :days then return # TODO: make ship go back!
-        when :crew then ship.crew_count! -= effect[1]
+        when :crew then ship.crew_count -= effect[1]
         when :cargo then return # TODO: make cargo loss happen
         when :shots then effect[1].each { |size, direction| fire_shot(size, direction, ship)}
       end
@@ -276,7 +276,7 @@ class SabotageCard < Card
 
   def execute
     # for this card, the ship with the least crew loses one ship component at random by rolling (max 3 times until one is hit)
-    ship = @ships.sort {|x| x.crew_count!}[0]
+    ship = @ships.sort {|x| x.crew_count}[0]
     success = false
     (1..3).each {
       if success then
@@ -302,7 +302,7 @@ class StardustCard < Card
   end
 
   def execute(ship)
-    days_to_lose = ship.exposed_connectors.length
+    @days_to_lose = ship.exposed_connectors.length
     # TODO : Lose this many days
   end
 end
