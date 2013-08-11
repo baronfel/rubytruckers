@@ -17,4 +17,10 @@ class TruckerState
   def set_score(player_name, score)
     @players[player_name] = score
   end
+
+  def advance_round
+    if(@round_number < 3)
+      @round_number += 1
+    end
+  end
 end

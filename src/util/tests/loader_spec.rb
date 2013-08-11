@@ -1,6 +1,7 @@
 require_relative '../loader'
 require_relative '../../../src/models/ship_tile'
 require_relative '../../../src/models/ship_definition'
+require_relative '../../../src/models/round_constraint'
 require 'rspec'
 
 describe Loader do
@@ -31,6 +32,17 @@ describe Loader do
       @loader.save_ship_design(10, definition)
       ret_ship = @loader.load_ship_design 10
       ret_ship.center.should == definition.center
+    end
+  end
+
+  describe '#save_round_constraint' do
+    it 'saves a test round constraint' do
+      round_3 = RoundConstraint.new(
+          3, [6,5,4,3], 12, 3, [1 => 1, 2 => 1, 3 => 2]
+      )
+      @loader.save_round_constraint(15, round_3)
+      ret_constraint = @loader.load_constraint 15
+      ret_constraint.round_number.should == round_3.round_number
     end
   end
 end
