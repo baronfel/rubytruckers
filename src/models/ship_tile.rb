@@ -5,14 +5,16 @@ class ShipTile
   attr_reader :contents
   attr_reader :sides
 
-  def initialize(coord, north, east, south, west, *contents)
-    @coord = coord
+  def initialize(north, east, south, west, *contents)
+    @coord = nil
     @sides = {north: north, east: east, south: south, west: west}
     @contents = contents
   end
 
   def rotate_clockwise
-    ShipTile.new(@coord, @sides[:west], @sides[:north], @sides[:east], @sides[:south], @contents.map { |c| c.respond_to?(:rotate_clockwise) ? c.rotate_clockwise : c })
+    tile = ShipTile.new(@sides[:west], @sides[:north], @sides[:east], @sides[:south], @contents.map { |c| c.respond_to?(:rotate_clockwise) ? c.rotate_clockwise : c })
+    tile.coord = @coord
+    tile
   end
 
   def rotate_clockwise!
@@ -25,7 +27,9 @@ class ShipTile
   end
 
   def rotate_counter
-    ShipTile.new(@coord, @sides[:east], @sides[:south], @sides[:west], @sides[:north], @contents.map { |c| c.respond_to?(:rotate_counter) ? c.rotate_counter : c })
+    tile = ShipTile.new(@sides[:east], @sides[:south], @sides[:west], @sides[:north], @contents.map { |c| c.respond_to?(:rotate_counter) ? c.rotate_counter : c })
+    tile.coord = @coord
+    tile
   end
 
   def rotate_counter!

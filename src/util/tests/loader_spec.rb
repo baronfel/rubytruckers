@@ -49,6 +49,6 @@ end
 
 def make_tiles(num)
   tile_array = []
-  num.times {|x| tile_array << ShipTile.new(Coordinate.new(x,x), nil, nil, nil, nil)}
+  num.times {|x| tile_array << ShipTile.new(nil, nil, nil, nil)}
   tile_array
 end

@@ -12,12 +12,12 @@ class ShipInstance
       end
       @shape[coord.x_loc][coord.y_loc] = :empty
     }
-    @shape[@center.x_loc][@center.y_loc] = ShipTile.new(@center,
-                                                        UniversalConnector.new,
-                                                        UniversalConnector.new,
-                                                        UniversalConnector.new,
-                                                        UniversalConnector.new,
-                                                        Habitat.new(2))
+    put_tile!(ShipTile.new(UniversalConnector.new,
+                           UniversalConnector.new,
+                           UniversalConnector.new,
+                           UniversalConnector.new,
+                           Habitat.new(2)),
+              @center)
     @removed_tiles = []
   end
 
@@ -215,8 +215,6 @@ class ShipInstance
   end
 
   def weapon_side_strength(orientation, side)
-    puts orientation
-    puts side
     orientation == :north ? side.gun_strength : side.gun_strength / 2.0
   end
 
@@ -225,11 +223,8 @@ class ShipInstance
       tile.sides.select { |orientation, side|
         side.respond_to?(:gun_strength) && (!side.respond_to?(:require_batteries) || side.require_batteries == 0)
       }
-    }.flatten.select { |hash|
-      !hash.empty?
-    }
-    puts weapons
-    strengths = weapons.map { |hash| hash.map{ |orientation, weapon| weapon_side_strength(orientation, weapon) } }.flatten
+    }.select { |hash| !hash.empty? }
+    strengths = weapons.map { |hash| hash.map { |orientation, weapon| weapon_side_strength(orientation, weapon) } }.flatten
     strengths.inject(0, &:+)
   end
 
@@ -238,16 +233,20 @@ class ShipInstance
       tile.sides.select { |orientation, side|
         side.respond_to?(:gun_strength)
       }
-    }.flatten.select { |hash| !hash.empty? }
+    }.select { |hash| !hash.empty? }
     strengths = weapons.map { |hash| hash.map { |orientation, weapon| weapon_side_strength(orientation, weapon) } }.flatten
     strengths.inject(0, &:+)
   end
 
   def engine_power!
     current_strength = min_engine_power
-    opt_engines = tiles.map { |tile| tile.sides.values.select { |side| side.respond_to?(:engine_strength) && (side.respond_to?(:require_batteries) && side.require_batteries > 0) } }.flatten
+    opt_engines = tiles.map { |tile|
+      tile.sides.values.select { |side|
+        side.respond_to?(:engine_strength) && (side.respond_to?(:require_batteries) && side.require_batteries > 0)
+      }
+    }.flatten
     opt_engines.each { |side|
-      batteries = player_choose_batteries('Choose ' + side.require_batteries + ' of your ' + batteries_left + ' batteries to add ' + side.engine_strength + ' to your engine strength. (Current strength: ' + current_strength + ')', side.require_batteries)
+      batteries = player_choose_batteries("Choose #{side.require_batteries} of your #{batteries_left} batteries to add #{side.engine_strength} to your engine strength. (Current strength: #{current_strength})", side.require_batteries)
       if batteries.count == side.require_batteries
         batteries.each { |coord| @shape[coord.x_loc][coord.y_loc].remove_a_battery! }
         current_strength += side.engine_strength
@@ -258,14 +257,20 @@ class ShipInstance
 
   def weapons_power!
     current_strength = min_weapons_power
-    opt_weapons = tiles.map { |tile| tile.sides.select { |orientation, side| side.respond_to?(:gun_strength) && (side.respond_to?(:require_batteries) && side.require_batteries > 0) } }.flatten
-    opt_weapons.each { |orientation, side|
-      strength = weapon_side_strength(orientation, side)
-      batteries = player_choose_batteries('Choose ' + side.require_batteries + ' of your ' + batteries_left + ' batteries to add ' + strength + ' to your weapon strength. (Current strength: ' + current_strength + ')', side.require_batteries)
-      if batteries.count == side.require_batteries
-        batteries.each { |coord| @shape[coord.x_loc][coord.y_loc].remove_a_battery! }
-        current_strength += strength
-      end
+    opt_weapons = tiles.map { |tile|
+      tile.sides.select { |orientation, side|
+        side.respond_to?(:gun_strength) && (side.respond_to?(:require_batteries) && side.require_batteries > 0)
+      }
+    }.select { |hash| !hash.empty? }
+    opt_weapons.each { |hash|
+      hash.map { |orientation, side|
+        strength = weapon_side_strength(orientation, side)
+        batteries = player_choose_batteries("Choose #{side.require_batteries} of your #{batteries_left} batteries to add #{strength} to your weapon strength. (Current strength: #{current_strength})", side.require_batteries)
+        if batteries.count == side.require_batteries
+          batteries.each { |coord| @shape[coord.x_loc][coord.y_loc].remove_a_battery! }
+          current_strength += strength
+        end
+      }
     }
     current_strength
   end
@@ -276,7 +281,7 @@ class ShipInstance
 
   def remove_crew(count)
     # TODO: flesh this out
-    crew_coord_to_remove = [Coordinate.new(0, 0)]
+    crew_coord_to_remove = [] # coordinates
     crew_coord_to_remove.each { |coord| @shape[coord.x_loc][coord.y_loc].remove_a_crew! }
   end
 
@@ -291,6 +296,6 @@ class ShipInstance
 
   def player_choose_batteries(prompt, number)
     # TODO: flesh this out
-    [Coordinate.new(0, 0)]
+    [] # coordinates
   end
 end
