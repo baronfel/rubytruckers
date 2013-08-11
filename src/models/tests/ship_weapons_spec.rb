@@ -25,7 +25,7 @@ describe 'ship weapons' do
   it 'should return a max power and min power for multi-gun scenarios correctly' do
     ship = ShipInstance.new(Loader.new(nil, '../../../assets/').load_ship_design(1))
     #add a weapon tile!
-    ship.put_tile!(ShipTile.new(Coordinate.new(6,7), SingleDouble.new(),nil,nil,nil), Coordinate.new(6,7))
+    ship.put_tile!(ShipTile.new(Coordinate.new(6,7), SingleCannon.new(),nil,nil,nil), Coordinate.new(6,7))
     ship.put_tile!(ShipTile.new(Coordinate.new(6,8), DoubleCannon.new(),nil,nil,nil), Coordinate.new(6,8))
     ship.min_weapons_power.should == 1
     ship.potential_weapons_power.should == 3

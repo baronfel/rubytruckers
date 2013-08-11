@@ -13,17 +13,17 @@ class ShipInstance
       @shape[coord.x_loc][coord.y_loc] = :empty
     }
     @shape[@center.x_loc][@center.y_loc] = ShipTile.new(@center,
-                                                      UniversalConnector.new,
-                                                      UniversalConnector.new,
-                                                      UniversalConnector.new,
-                                                      UniversalConnector.new,
-                                                      Habitat.new(2))
+                                                        UniversalConnector.new,
+                                                        UniversalConnector.new,
+                                                        UniversalConnector.new,
+                                                        UniversalConnector.new,
+                                                        Habitat.new(2))
     @removed_tiles = []
   end
 
   def tiles
-    tile_list = @shape.values.map { |v| v.values }.flatten.select {|x| x != :empty}
-    puts tile_list
+    tile_list = @shape.values.map { |v| v.values }.flatten.select { |x| x != :empty }
+    # puts tile_list
     tile_list
   end
 
@@ -221,17 +221,27 @@ class ShipInstance
   end
 
   def min_weapons_power
-    weapons = tiles.map { |tile| tile.sides.select { |orientation, side| side.respond_to?(:gun_strength) && (!side.respond_to?(:require_batteries) || side.require_batteries == 0) } }.flatten
+    weapons = tiles.map { |tile|
+      tile.sides.select { |orientation, side|
+        side.respond_to?(:gun_strength) && (!side.respond_to?(:require_batteries) || side.require_batteries == 0)
+      }
+    }.flatten.select { |hash|
+      !hash.empty?
+    }
     puts weapons
-    strengths = weapons.map { |orientation, weapon| weapon_side_strength(orientation, weapon) }
+    strengths = weapons.map { |hash| hash.map{ |orientation, weapon| weapon_side_strength(orientation, weapon) } }.flatten
     strengths.inject(0, &:+)
   end
 
   def potential_weapons_power
-    weapons = tiles.map { |tile| tile.sides.select { |orientation, side| side.respond_to?(:gun_strength) } }.flatten
-    strengths = weapons.map { |orientation, weapon| weapon_side_strength(orientation, weapon) }
+    weapons = tiles.map { |tile|
+      tile.sides.select { |orientation, side|
+        side.respond_to?(:gun_strength)
+      }
+    }.flatten.select { |hash| !hash.empty? }
+    strengths = weapons.map { |hash| hash.map { |orientation, weapon| weapon_side_strength(orientation, weapon) } }.flatten
     strengths.inject(0, &:+)
-end
+  end
 
   def engine_power!
     current_strength = min_engine_power
@@ -266,7 +276,7 @@ end
 
   def remove_crew(count)
     # TODO: flesh this out
-    crew_coord_to_remove = [Coordinate.new(0,0)]
+    crew_coord_to_remove = [Coordinate.new(0, 0)]
     crew_coord_to_remove.each { |coord| @shape[coord.x_loc][coord.y_loc].remove_a_crew! }
   end
 
