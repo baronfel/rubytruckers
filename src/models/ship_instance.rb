@@ -21,10 +21,9 @@ class ShipInstance
     @removed_tiles = []
   end
 
+  # returns all valid tiles on this ship, meaning tiles that aren't :empty
   def tiles
-    tile_list = @shape.values.map { |v| v.values }.flatten.select { |x| x != :empty }
-    # puts tile_list
-    tile_list
+    @shape.values.map { |v| v.values }.flatten.select {|x| x != :empty}
   end
 
   def put_tile!(tile, coord)

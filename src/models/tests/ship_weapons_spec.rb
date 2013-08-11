@@ -46,6 +46,5 @@ describe 'ship weapons' do
     @ship.put_tile!(ShipTile.new(DoubleCannon.new(),nil,nil,nil), Coordinate.new(6,8))
     @ship.min_weapons_power.should == 0.5
     @ship.weapons_power!.should == 0.5
-
   end
 end
