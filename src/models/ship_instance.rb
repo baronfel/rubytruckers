@@ -22,7 +22,9 @@ class ShipInstance
   end
 
   def tiles
-    @shape.values.map { |v| v.values }.flatten.select {|x| x != :empty}
+    tile_list = @shape.values.map { |v| v.values }.flatten.select {|x| x != :empty}
+    puts tile_list
+    tile_list
   end
 
   def put_tile!(tile, coord)
@@ -213,11 +215,14 @@ class ShipInstance
   end
 
   def weapon_side_strength(orientation, side)
+    puts orientation
+    puts side
     orientation == :north ? side.gun_strength : side.gun_strength / 2.0
   end
 
   def min_weapons_power
     weapons = tiles.map { |tile| tile.sides.select { |orientation, side| side.respond_to?(:gun_strength) && (!side.respond_to?(:require_batteries) || side.require_batteries == 0) } }.flatten
+    puts weapons
     strengths = weapons.map { |orientation, weapon| weapon_side_strength(orientation, weapon) }
     strengths.inject(0, &:+)
   end
