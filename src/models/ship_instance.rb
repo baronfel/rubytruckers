@@ -22,7 +22,7 @@ class ShipInstance
   end
 
   def tiles
-    @shape.values.map { |v| v.values }.flatten
+    @shape.values.map { |v| v.values }.flatten.select {|x| x != :empty}
   end
 
   def put_tile!(tile, coord)
