@@ -66,6 +66,7 @@ GEM
       thor (>= 0.14.6, < 2.0)
     rake (10.0.3)
     rdoc (3.9.5)
+    rr (1.1.1)
     rspec (2.13.0)
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
@@ -91,4 +92,5 @@ PLATFORMS
 
 DEPENDENCIES
   rails
+  rr
   rspec

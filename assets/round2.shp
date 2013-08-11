@@ -3,18 +3,18 @@ center: !ruby/object:Coordinate
   x_loc: 7
   y_loc: 7
 shape:
-- - !ruby/object:Coordinate
-    x_loc: 7
-    y_loc: 4
-- - !ruby/object:Coordinate
-    x_loc: 6
-    y_loc: 5
-  - !ruby/object:Coordinate
-    x_loc: 7
-    y_loc: 5
-  - !ruby/object:Coordinate
-    x_loc: 8
-    y_loc: 5
+- !ruby/object:Coordinate
+  x_loc: 7
+  y_loc: 4
+- !ruby/object:Coordinate
+  x_loc: 6
+  y_loc: 5
+- !ruby/object:Coordinate
+  x_loc: 7
+  y_loc: 5
+- !ruby/object:Coordinate
+  x_loc: 8
+  y_loc: 5
 - !ruby/object:Coordinate
   x_loc: 5
   y_loc: 6

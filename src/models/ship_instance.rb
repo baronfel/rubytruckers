@@ -1,6 +1,6 @@
-requires ShipTile
-requires UniversalConnector
-requires Shield
+require_relative 'ship_tile'
+require_relative 'tile_side'
+require_relative 'tile_content'
 
 class ShipInstance
   def initialize(definition)
@@ -12,7 +12,7 @@ class ShipInstance
       end
       @shape[coord.x_loc][coord.y_loc] = :empty
     }
-    @shape[center.x_loc][center.y_loc] = ShipTile.new(center,
+    @shape[@center.x_loc][@center.y_loc] = ShipTile.new(@center,
                                                       UniversalConnector.new,
                                                       UniversalConnector.new,
                                                       UniversalConnector.new,

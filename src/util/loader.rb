@@ -1,5 +1,8 @@
 class Loader
   require 'yaml'
+  require_relative '../../src/models/ship_definition'
+  require_relative '../../src/models/ship_tile'
+  require_relative '../../src/models/round_constraint'
 
   def initialize(tile_file, ship_design_path)
     @tile_file = tile_file
