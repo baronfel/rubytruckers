@@ -1,6 +1,7 @@
 require_relative 'loader'
 require_relative '../../src/models/ship_definition'
 require_relative '../../src/models/coordinate'
+require_relative '../../src/models/round_constraint'
 
 class ShipLayoutCreator
 
@@ -40,11 +41,35 @@ class ShipLayoutCreator
     loader = Loader.new(nil, '../../assets/')
     loader.save_ship_design(3, design)
   end
+
+  def create_round_one_constraint
+    round_1 = RoundConstraint.new(
+        1, [4,3,2,1], 4, 2, [1 => 3]
+    )
+    loader = Loader.new(nil, '../../assets/')
+    loader.save_round_constraint(1, round_1)
+  end
+
+  def create_round_two_constraint
+    round_2 = RoundConstraint.new(
+        2, [5,4,3,2], 8, 2, [1 => 1, 2=>2]
+    )
+    loader = Loader.new(nil, '../../assets/')
+    loader.save_round_constraint(2, round_2)
+  end
+
+  def create_round_three_constraint
+    round_3 = RoundConstraint.new(
+        3, [6,5,4,3], 12, 3, [1 => 1, 2 => 1, 3 => 2]
+    )
+    loader = Loader.new(nil, '../../assets/')
+    loader.save_round_constraint(3, round_3)
+  end
 end
 
 =begin
 creator = ShipLayoutCreator.new
-creator.create_round_one_design
-creator.create_round_two_design
-creator.create_round_three_design
+creator.create_round_one_constraint
+creator.create_round_two_constraint
+creator.create_round_three_constraint
 =end

@@ -1,0 +1,11 @@
+--- !ruby/object:RoundConstraint
+round_number: 1
+arrival_awards:
+- 4
+- 3
+- 2
+- 1
+first_arrival_bonus: 4
+ship_spacing: 2
+card_piles:
+- 1: 3
