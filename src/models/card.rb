@@ -302,7 +302,7 @@ class StardustCard < Card
   end
 
   def execute(ship)
-    days_to_lose = ship.exposed_connectors.length
+    @days_to_lose = ship.exposed_connectors.length
     # TODO : Lose this many days
   end
 end
