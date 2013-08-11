@@ -69,8 +69,7 @@ end
 
 =begin
 creator = ShipLayoutCreator.new
-creator.create_round_one_constraint
-creator.create_round_two_constraint
-creator.create_round_three_constraint
+creator.create_round_one_design
+creator.create_round_two_design
+creator.create_round_three_design
 =end
-
