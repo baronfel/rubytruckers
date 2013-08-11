@@ -207,11 +207,11 @@ class ShipInstance
   end
 
   def min_engine_power
-    tiles.map { |tile| tile.sides.values.filter { |side| side.respond_to?(:engine_strength) && (!side.respond_to?(:require_batteries) || side.require_batteries == 0) }.map { |side| side.engine_strength } }.flatten.inject(0, &:+)
+    tiles.map { |tile| tile.sides.values.select { |side| side.respond_to?(:engine_strength) && (!side.respond_to?(:require_batteries) || side.require_batteries == 0) }.map { |side| side.engine_strength } }.flatten.inject(0, &:+)
   end
 
   def potential_engine_power
-    tiles.map { |tile| tile.sides.values.filter { |side| side.respond_to?(:engine_strength) }.map { |side| side.engine_strength } }.flatten.inject(0, &:+)
+    tiles.map { |tile| tile.sides.values.select { |side| side.respond_to?(:engine_strength) }.map { |side| side.engine_strength } }.flatten.inject(0, &:+)
   end
 
   def weapon_side_strength(orientation, side)
