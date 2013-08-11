@@ -70,7 +70,7 @@ class ShipInstance
           adj_tiles = get_adjacent_tiles(tile)
           adj_tiles.each { |adj_tile|
             unless tile.follows_rules?(adj_tile)
-              bad_tile = player_choose_tile(tile, adj_tile)
+              bad_tile = player_choose_tile('This tile connection is invalid.  Which tile would you like to remove?', false, tile, adj_tile)
               @removed_tiles << remove_tile!(bad_tile.coord)
             end
           }
@@ -104,6 +104,10 @@ class ShipInstance
     unconnected_tiles.each { |tile| remove_tile!(tile.coord) }
   end
 
+  def populate_crew
+    # TODO: flesh this out
+  end
+
   def get_adjacent_tiles(tile)
     x = tile.coord.x_loc
     y = tile.coord.y_loc
@@ -120,9 +124,9 @@ class ShipInstance
     nil
   end
 
-  def player_choose_tile(tile1, tile2)
+  def player_choose_tile(prompt, allowNone, firstTile, *otherTiles)
     # TODO: make the player choose a tile
-    tile1
+    firstTile
   end
 
   def get_outer_tile(position, direction)
@@ -201,38 +205,36 @@ class ShipInstance
   end
 
   def min_engine_power
-    tiles.map { |tile| tile.sides }.values.inject(0) { |sum, side|
-      sum += side.engine_strength if side.respond_to?(:engine_strength) && (!side.respond_to?(:require_batteries) || side.require_batteries == 0)
-      sum
-    }
+    tiles.map { |tile| tile.sides.values.filter { |side| side.respond_to?(:engine_strength) && (!side.respond_to?(:require_batteries) || side.require_batteries == 0) }.map { |side| side.engine_strength } }.flatten.inject(0, &:+)
   end
 
   def potential_engine_power
-    tiles.map { |tile| tile.sides }.values.inject(0) { |sum, side|
-      sum += side.engine_strength if side.respond_to?(:engine_strength)
-      sum
-    }
+    tiles.map { |tile| tile.sides.values.filter { |side| side.respond_to?(:engine_strength) }.map { |side| side.engine_strength } }.flatten.inject(0, &:+)
+  end
+
+  def weapon_side_strength(orientation, side)
+    orientation == :north ? side.gun_strength : side.gun_strength / 2.0
   end
 
   def min_weapons_power
-    weapons = tiles.map { |tile| tile.sides }.select { |key, side| side.respond_to?(:gun_strength) && (!side.respond_to?(:require_batteries) || side.require_batteries == 0) }
-    strengths = weapons.map { |orientation, weapon| orientation == :north ? weapon.gun_strength : weapon.gun_strength / 2.0 }
+    weapons = tiles.map { |tile| tile.sides.select { |orientation, side| side.respond_to?(:gun_strength) && (!side.respond_to?(:require_batteries) || side.require_batteries == 0) } }.flatten
+    strengths = weapons.map { |orientation, weapon| weapon_side_strength(orientation, weapon) }
     strengths.inject(0, &:+)
   end
 
   def potential_weapons_power
-    weapons = tiles.map { |tile| tile.sides }.select { |key, side| side.respond_to?(:gun_strength) }
-    strengths = weapons.map { |orientation, weapon| orientation == :north ? weapon.gun_strength : weapon.gun_strength / 2.0 }
+    weapons = tiles.map { |tile| tile.sides.select { |orientation, side| side.respond_to?(:gun_strength) } }.flatten
+    strengths = weapons.map { |orientation, weapon| weapon_side_strength(orientation, weapon) }
     strengths.inject(0, &:+)
 end
 
   def engine_power!
     current_strength = min_engine_power
-    opt_engines = tiles.map { |tile| tile.sides }.values.select { |side| side.respond_to?(:engine_strength) && (side.respond_to?(:require_batteries) && side.require_batteries > 0) }
+    opt_engines = tiles.map { |tile| tile.sides.values.select { |side| side.respond_to?(:engine_strength) && (side.respond_to?(:require_batteries) && side.require_batteries > 0) } }.flatten
     opt_engines.each { |side|
       batteries = player_choose_batteries('Choose ' + side.require_batteries + ' of your ' + batteries_left + ' batteries to add ' + side.engine_strength + ' to your engine strength. (Current strength: ' + current_strength + ')', side.require_batteries)
       if batteries.count == side.require_batteries
-        batteries.each { |coord| @shape[coord.x_loc][coord.y_loc].remove_battery! }
+        batteries.each { |coord| @shape[coord.x_loc][coord.y_loc].remove_a_battery! }
         current_strength += side.engine_strength
       end
     }
@@ -241,12 +243,12 @@ end
 
   def weapons_power!
     current_strength = min_weapons_power
-    opt_weapons = tiles.map { |tile| tile.sides }.select { |orientation, side| side.respond_to?(:gun_strength) && (side.respond_to?(:require_batteries) && side.require_batteries > 0) }
+    opt_weapons = tiles.map { |tile| tile.sides.select { |orientation, side| side.respond_to?(:gun_strength) && (side.respond_to?(:require_batteries) && side.require_batteries > 0) } }.flatten
     opt_weapons.each { |orientation, side|
       strength = weapon_side_strength(orientation, side)
       batteries = player_choose_batteries('Choose ' + side.require_batteries + ' of your ' + batteries_left + ' batteries to add ' + strength + ' to your weapon strength. (Current strength: ' + current_strength + ')', side.require_batteries)
       if batteries.count == side.require_batteries
-        batteries.each { |coord| @shape[coord.x_loc][coord.y_loc].remove_battery! }
+        batteries.each { |coord| @shape[coord.x_loc][coord.y_loc].remove_a_battery! }
         current_strength += strength
       end
     }
@@ -254,11 +256,17 @@ end
   end
 
   def crew_count
-    tiles.inject(0) { |sum, tile| sum += tile.crew_count }
+    tiles.inject(0) { |sum, tile| sum += tile.crew_count; sum }
+  end
+
+  def remove_crew(count)
+    # TODO: flesh this out
+    crew_coord_to_remove = [Coordinate.new(0,0)]
+    crew_coord_to_remove.each { |coord| @shape[coord.x_loc][coord.y_loc].remove_a_crew! }
   end
 
   def batteries_left
-    tiles.inject(0) { |sum, tile| sum += tile.batteries_remaining }
+    tiles.inject(0) { |sum, tile| sum += tile.batteries_remaining; sum }
   end
 
   def player_choice_binary?(prompt)

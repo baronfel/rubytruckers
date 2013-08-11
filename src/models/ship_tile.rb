@@ -81,13 +81,23 @@ class ShipTile
       if content.respond_to?(:batteries_remaining)
         sum += content.batteries_remaining
       end
+      sum
     }
   end
 
-  def remove_battery!
+  def remove_a_battery!
     @contents.each { |content|
       if content.respond_to?(:batteries_remaining) && content.batteries_remaining > 0
-        content.batteries_remaining = content.batteries_remaining
+        content.batteries_remaining -= 1
+        break
+      end
+    }
+  end
+
+  def remove_a_crew!
+    @contents.each { |content|
+      if content.respond_to?(:beings) && content.beings.length > 0
+        content.beings = content.beings.drop(1)
         break
       end
     }
@@ -96,8 +106,9 @@ class ShipTile
   def crew_remaining
     @contents.inject(0) { |sum, content|
       if content.respond_to?(:beings)
-        sum += content.beings
+        sum += content.beings.length
       end
+      sum
     }
   end
 end
