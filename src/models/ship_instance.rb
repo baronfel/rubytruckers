@@ -201,26 +201,28 @@ class ShipInstance
   end
 
   def min_engine_power
-    tiles.map { |tile| tile.sides }.values.inject(0) { |sum, side| sum += side.engine_strength if side.respond_to?(:engine_strength) && (!side.respond_to?(:require_batteries) || side.require_batteries == 0) }
+    tiles.map { |tile| tile.sides }.values.inject(0) { |sum, side|
+      sum += side.engine_strength if side.respond_to?(:engine_strength) && (!side.respond_to?(:require_batteries) || side.require_batteries == 0)
+      sum
+    }
   end
 
   def potential_engine_power
-    tiles.map { |tile| tile.sides }.values.inject(0) { |sum, side| sum += side.engine_strength if side.respond_to?(:engine_strength) }
-  end
-
-  def weapon_side_strength(orientation, side)
-    orientation == :north ? side.gun_strength : side.gun_strength / 2.0
+    tiles.map { |tile| tile.sides }.values.inject(0) { |sum, side|
+      sum += side.engine_strength if side.respond_to?(:engine_strength)
+      sum
+    }
   end
 
   def min_weapons_power
-    weapons = tiles.map { |tile| tile.sides }.select { |orientation, side| side.respond_to?(:gun_strength) && (!side.respond_to?(:require_batteries) || side.require_batteries == 0) }
-    strengths = weapons.map { |orientation, weapon| weapon_side_strength(orientation, weapon) }
+    weapons = tiles.map { |tile| tile.sides }.select { |key, side| side.respond_to?(:gun_strength) && (!side.respond_to?(:require_batteries) || side.require_batteries == 0) }
+    strengths = weapons.map { |orientation, weapon| orientation == :north ? weapon.gun_strength : weapon.gun_strength / 2.0 }
     strengths.inject(0, &:+)
   end
 
   def potential_weapons_power
-    weapons = tiles.map { |tile| tile.sides }.select { |orientation, side| side.respond_to?(:gun_strength) }
-    strengths = weapons.map { |orientation, weapon| weapon_side_strength(orientation, weapon) }
+    weapons = tiles.map { |tile| tile.sides }.select { |key, side| side.respond_to?(:gun_strength) }
+    strengths = weapons.map { |orientation, weapon| orientation == :north ? weapon.gun_strength : weapon.gun_strength / 2.0 }
     strengths.inject(0, &:+)
 end
 
