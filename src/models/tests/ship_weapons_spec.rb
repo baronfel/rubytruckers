@@ -39,4 +39,13 @@ describe 'ship weapons' do
     @ship.min_weapons_power.should == 0.5
     @ship.potential_weapons_power.should == 2.5
   end
+
+  it 'should return a max power and min power for multi-gun, multi directional scenario correctly' do
+    #add a weapon tile!
+    @ship.put_tile!(ShipTile.new(nil,SingleCannon.new(),nil,nil), Coordinate.new(6,7))
+    @ship.put_tile!(ShipTile.new(DoubleCannon.new(),nil,nil,nil), Coordinate.new(6,8))
+    @ship.min_weapons_power.should == 0.5
+    @ship.weapons_power!.should == 0.5
+
+  end
 end
