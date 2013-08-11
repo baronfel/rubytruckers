@@ -12,7 +12,7 @@ class ShipTile
   end
 
   def rotate_clockwise
-    ShipTile.new(@coord, @sides[:west], @sides[:north], @sides[:east], @sides[:south], @contents.map {|c| c.respond_to?(:rotate_clockwise) ? c.rotate_clockwise : c})
+    ShipTile.new(@coord, @sides[:west], @sides[:north], @sides[:east], @sides[:south], @contents.map { |c| c.respond_to?(:rotate_clockwise) ? c.rotate_clockwise : c })
   end
 
   def rotate_clockwise!
@@ -21,11 +21,11 @@ class ShipTile
     @sides[:west] = @sides[:south]
     @sides[:south] = @sides[:east]
     @sides[:east] = temp_north
-    @contents.each {|c| c.rotate_clockwise! if c.respond_to?(:rotate_clockwise!)}
+    @contents.each { |c| c.rotate_clockwise! if c.respond_to?(:rotate_clockwise!) }
   end
 
   def rotate_counter
-    ShipTile.new(@coord, @sides[:east], @sides[:south], @sides[:west], @sides[:north], @contents.map {|c| c.respond_to?(:rotate_counter) ? c.rotate_counter : c})
+    ShipTile.new(@coord, @sides[:east], @sides[:south], @sides[:west], @sides[:north], @contents.map { |c| c.respond_to?(:rotate_counter) ? c.rotate_counter : c })
   end
 
   def rotate_counter!
@@ -34,7 +34,7 @@ class ShipTile
     @sides[:east] = @sides[:south]
     @sides[:south] = @sides[:west]
     @sides[:west] = temp_north
-    @contents.each {|c| c.rotate_counter! if c.respond_to?(:rotate_counter!)}
+    @contents.each { |c| c.rotate_counter! if c.respond_to?(:rotate_counter!) }
   end
 
   def get_side(orientation)
@@ -42,7 +42,7 @@ class ShipTile
   end
 
   def valid_orientation?
-    @sides.each {|orientation, side| return false if !side.valid_orientation?(orientation)}
+    @sides.each { |orientation, side| return false if !side.valid_orientation?(orientation) }
     true
   end
 
@@ -74,5 +74,30 @@ class ShipTile
     my_side = @sides[my_orientation]
     adjacent_side = adjacent_tile.get_side(adjacent_orientation)
     [my_side, adjacent_side]
+  end
+
+  def batteries_remaining
+    @contents.inject(0) { |sum, content|
+      if content.respond_to?(:batteries_remaining)
+        sum += content.batteries_remaining
+      end
+    }
+  end
+
+  def remove_battery!
+    @contents.each { |content|
+      if content.respond_to?(:batteries_remaining) && content.batteries_remaining > 0
+        content.batteries_remaining = content.batteries_remaining
+        break
+      end
+    }
+  end
+
+  def crew_remaining
+    @contents.inject(0) { |sum, content|
+      if content.respond_to?(:beings)
+        sum += content.beings
+      end
+    }
   end
 end
